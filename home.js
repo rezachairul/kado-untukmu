@@ -29,26 +29,64 @@ const countdownInterval = setInterval(() => {
 
 // Fungsi Open Me
 function openSurprise() {
+  backsong.volume = 1;
   backsong.play().catch(() => alert("🎶 Klik lagi untuk memutar musik ya!"));
   showPopup("popup-main"); // buka popup utama
   openContainer.classList.add("hidden");
   startConfetti();
 }
 
+// 🔉 Helper untuk fade volume backsong
+function fadeVolume(target, duration = 500) {
+  const step = 50; // ms
+  const volumeChange = (target - backsong.volume) / (duration / step);
+
+  const fade = setInterval(() => {
+    let newVolume = backsong.volume + volumeChange;
+    if ((volumeChange < 0 && newVolume <= target) ||
+        (volumeChange > 0 && newVolume >= target)) {
+      backsong.volume = target;
+      clearInterval(fade);
+    } else {
+      backsong.volume = newVolume;
+    }
+  }, step);
+}
+
 // 🎥 Popup Video
 function openVideoPopup() {
   showPopup("popup-video");
+  fadeVolume(0, 0); // kecilin backsong
+  const video = document.getElementById("special-video");
+  video.muted = false;
+  video.currentTime = 0;
+  video.play();
 }
 function closeVideoPopup() {
   showPopup("popup-main");
+  fadeVolume(1, 800); // balikin backsong
+  const video = document.getElementById("special-video");
+  video.pause();
 }
 
 // 💌 Popup Collage
 function openCollagePopup() {
   showPopup("popup-collage");
+
+  // mulai slideshow
+  const slideshow = document.getElementById("slideshow-img");
+  collageInterval = setInterval(() => {
+    collageIndex = (collageIndex + 1) % collageImages.length;
+    slideshow.style.opacity = 0;
+    setTimeout(() => {
+      slideshow.src = collageImages[collageIndex];
+      slideshow.style.opacity = 1;
+    }, 500);
+  }, 2500); // ganti gambar tiap 2.5 detik
 }
 function closeCollagePopup() {
   showPopup("popup-main");
+  clearInterval(collageInterval); // stop slideshow
 }
 
 // 🎉 Confetti
@@ -105,23 +143,3 @@ const collageImages = [
 
 let collageIndex = 0;
 let collageInterval;
-
-function openCollagePopup() {
-  showPopup("popup-collage");
-
-  // mulai slideshow
-  const slideshow = document.getElementById("slideshow-img");
-  collageInterval = setInterval(() => {
-    collageIndex = (collageIndex + 1) % collageImages.length;
-    slideshow.style.opacity = 0;
-    setTimeout(() => {
-      slideshow.src = collageImages[collageIndex];
-      slideshow.style.opacity = 1;
-    }, 500);
-  }, 2500); // ganti gambar tiap 2.5 detik
-}
-
-function closeCollagePopup() {
-  showPopup("popup-main");
-  clearInterval(collageInterval); // stop slideshow
-}
