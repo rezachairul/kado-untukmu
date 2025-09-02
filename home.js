@@ -1,11 +1,13 @@
-// Target tanggal (03 September 2025 00:00)
+// Target tanggal ulang tahun
 // const targetDate = new Date("Sep 3, 2025 00:00:00").getTime();
-const targetDate = new Date().getTime() + 5000; // 5 detik dari sekarang
+const targetDate = new Date().getTime() + 5000; // demo 5 detik
 
 const timerElement = document.getElementById("timer");
-const popup = document.getElementById("popup");
 const countdown = document.getElementById("countdown");
+const openContainer = document.getElementById("open-container");
+const popup = document.getElementById("popup");
 
+// Countdown
 const countdownInterval = setInterval(() => {
   const now = new Date().getTime();
   const distance = targetDate - now;
@@ -13,8 +15,7 @@ const countdownInterval = setInterval(() => {
   if (distance <= 0) {
     clearInterval(countdownInterval);
     countdown.classList.add("hidden");
-    popup.classList.remove("hidden");
-    startConfetti();
+    openContainer.classList.remove("hidden"); // munculin tombol
     return;
   }
 
@@ -26,12 +27,22 @@ const countdownInterval = setInterval(() => {
   timerElement.innerHTML = `${days}d ${hours}h ${minutes}m ${seconds}s`;
 }, 1000);
 
+// Fungsi tombol Open Me
+function openSurprise() {
+  document.getElementById("backsong").play().catch(() => {
+    alert("🎶 Klik lagi untuk memutar musik ya!");
+  });
+  popup.classList.remove("hidden");
+  openContainer.classList.add("hidden");
+  startConfetti();
+}
+
 // tombol GIF
 function openGif() {
   window.open("https://media.giphy.com/media/3o6ZsYm5hGZp1t1E7W/giphy.gif", "_blank");
 }
 
-// tombol Open
+// tombol Open More
 function openNext() {
   alert("💌 Ini hanya awal dari kejutan kecilku untukmu!");
 }
