@@ -7,9 +7,16 @@ Terdiri dari hitung mundur, popup ucapan, confetti, dan backsound musik.
 
 ## 📂 Struktur Folder
 📦kado-untukmu
- ┣ 📜hbd.mp3
+ ┣ 📂.git
+ ┣ 📂assets
+ ┃ ┣ 📂audio
+ ┃ ┃ ┗ 📜hbd.mp3
+ ┃ ┣ 📂img
+ ┃ ┃ ┗ 📜birthday-cake.png
+ ┃ ┗ 📂video
  ┣ 📜home.html
  ┣ 📜home.js
+ ┣ 📜README.md
  ┗ 📜style.css
 
 

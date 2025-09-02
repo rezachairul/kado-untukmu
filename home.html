@@ -1,48 +1,101 @@
 <!DOCTYPE html>
 <html lang="id">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Kado Untukmu 🎁</title>
-  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-  <link rel="stylesheet" href="style.css">
-</head>
-<body class="bg-gradient-to-br from-pink-200 via-pink-100 to-purple-200 flex items-center justify-center min-h-screen relative">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Kado Untukmu 🎁</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="style.css" />
+    <link id="favicon" rel="shortcut icon" href="/assets/img/birthday-cake.png" type="image/x-icon">
+  </head>
+  <body class="bg-gradient-to-br from-pink-200 via-pink-100 to-purple-200 flex items-center justify-center min-h-screen relative">
+    <!-- Musik -->
+    <audio id="backsong" loop>
+      <source src="/assets/audio/hbd.mp3" type="audio/mpeg" />
+      Browser kamu tidak mendukung audio 😢
+    </audio>
 
-  <!-- Musik (tanpa autoplay, biar aman di browser) -->
-  <audio id="backsong" loop>
-    <source src="/assets/audio/hbd.mp3" type="audio/mpeg">
-    Browser kamu tidak mendukung audio 😢
-  </audio>
+    <!-- Countdown -->
+    <div id="countdown" class="text-center bg-white/70 rounded-2xl p-8 shadow-2xl backdrop-blur-md" >
+      <h1 class="text-3xl font-bold text-pink-700 mb-4 animate-pulse">
+        Hitung Mundur 🎉
+      </h1>
+      <p id="timer" class="text-6xl font-mono font-bold text-pink-900 drop-shadow-lg" ></p>
+    </div>
 
-  <!-- Countdown -->
-  <div id="countdown" class="text-center bg-white/70 rounded-2xl p-8 shadow-2xl backdrop-blur-md">
-    <h1 class="text-3xl font-bold text-pink-700 mb-4 animate-pulse">Hitung Mundur 🎉</h1>
-    <p id="timer" class="text-6xl font-mono font-bold text-pink-900 drop-shadow-lg"></p>
-  </div>
+    <!-- Tombol Open -->
+    <div id="open-container" class="hidden text-center">
+      <button onclick="openSurprise()" class="px-6 py-3 rounded-xl bg-gradient-to-r from-pink-500 to-purple-500 text-white text-2xl font-bold shadow-lg hover:scale-110 transform transition animate-bounce">
+        ✨ Open Me
+      </button>
+    </div>
 
-<!-- Tombol Open (muncul setelah countdown habis) -->
-<div id="open-container" class="hidden text-center">
-  <button onclick="openSurprise()" 
-    class="px-6 py-3 rounded-xl bg-gradient-to-r from-pink-500 to-purple-500 text-white text-2xl font-bold shadow-lg hover:scale-110 transform transition animate-bounce">
-    ✨ Open Me
-  </button>
-</div>
+    <!-- Popup Utama -->
+    <div id="popup-main" class="hidden fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center" >
+      <div class="bg-white rounded-2xl shadow-2xl p-8 max-w-xl w-full mx-4 text-center space-y-4 animate-fadeIn relative">
+        <!-- Confetti -->
+        <canvas id="confetti-canvas" class="absolute inset-0 w-full h-full pointer-events-none" ></canvas>
 
-  <!-- Popup Ucapan -->
-  <div id="popup" class="hidden fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center">
-    <div class="bg-white rounded-2xl shadow-2xl p-8 max-w-xl w-full mx-4 text-center space-y-4 animate-fadeIn relative">
-      <canvas id="confetti-canvas" class="absolute inset-0 w-full h-full pointer-events-none"></canvas>
-      <img src="/assets/img/birthday-cake.png" alt="kue" class="w-28 mx-auto animate-bounce">
-      <h2 class="text-3xl font-bold text-pink-700">Selamat Ulang Tahun 🎂</h2>
-      <p class="text-lg text-pink-900">Selamat ulang tahun ke-23 sayangku 💖 Semoga selalu bahagia, sehat, dan penuh cinta 🥰</p>
-      <div class="flex justify-center space-x-4 mt-6">
-        <button onclick="openGif()" class="px-5 py-2 rounded-lg bg-pink-500 hover:bg-pink-600 text-white">🎥 Lihat Akuu 💖</button>
-        <button onclick="openNext()" class="px-5 py-2 rounded-lg bg-green-500 hover:bg-green-600 text-white">💌 Open More 💖</button>
+        <img src="/assets/img/birthday-cake.png" alt="kue" class="w-28 mx-auto animate-bounce" />
+
+        <h2 class="text-3xl font-bold text-pink-700">Selamat Ulang Tahun 🎂</h2>
+        <p class="text-lg text-pink-900">
+          Selamat ulang tahun ke-23 sayangku 💖 Semoga selalu bahagia, sehat,
+          dan penuh cinta 🥰
+        </p>
+
+        <div class="flex justify-center space-x-4 mt-6">
+          <button onclick="openVideoPopup()" class="px-5 py-2 rounded-lg bg-pink-500 hover:bg-pink-600 text-white">
+            🎥 Lihat Akuu 💖
+          </button>
+          <button onclick="openCollagePopup()" class="px-5 py-2 rounded-lg bg-green-500 hover:bg-green-600 text-white">
+            💌 Open More 💖
+          </button>
+        </div>
       </div>
     </div>
-  </div>
 
-  <script src="home.js"></script>
-</body>
+    <!-- Popup Video -->
+    <div id="popup-video"class="hidden fixed inset-0 bg-black bg-opacity-80 flex items-center justify-center">
+      <div class="bg-white rounded-2xl shadow-2xl p-6 w-full max-w-2xl relative">
+        <button onclick="closeVideoPopup()" class="absolute top-2 right-2 text-red-500 text-xl" >
+          ✖
+        </button>
+        <h2 class="text-xl font-bold text-pink-700 mb-4">🎥 Video Spesial</h2>
+        <div class="aspect-w-16 aspect-h-9">
+          <iframe
+            class="w-full h-64 rounded-xl"
+            src="https://www.youtube.com/embed/ScMzIvxBSi4"
+            title="YouTube video player"
+            frameborder="0"
+            allowfullscreen
+          ></iframe>
+        </div>
+      </div>
+    </div>
+
+    <!-- Popup Collage -->
+    <div id="popup-collage" class="hidden fixed inset-0 bg-black bg-opacity-80 flex items-center justify-center" >
+        <div class="bg-white rounded-2xl shadow-2xl p-6 w-full max-w-3xl relative text-center" >
+            <button onclick="closeCollagePopup()" class="absolute top-2 right-2 text-red-500 text-xl" >
+            ✖
+            </button>
+            <h2 class="text-2xl font-bold text-pink-700 mb-4">
+            💌 Dari Aku Untukmu
+            </h2>
+            <p class="text-lg text-gray-700 mb-6">
+            Semoga setiap momen kita penuh tawa, cinta, dan kenangan indah 🥰
+            </p>
+
+            <!-- Slideshow -->
+            <div class="relative w-full h-64 overflow-hidden rounded-xl">
+            <img id="slideshow-img" src="https://picsum.photos/600?random=1"
+                class="w-full h-full object-cover transition-opacity duration-700">
+            </div>
+        </div>
+    </div>
+
+
+    <script src="home.js"></script>
+  </body>
 </html>

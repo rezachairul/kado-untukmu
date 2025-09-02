@@ -1,11 +1,11 @@
-// Target tanggal ulang tahun
+// Target tanggal
 // const targetDate = new Date("Sep 3, 2025 00:00:00").getTime();
 const targetDate = new Date().getTime() + 5000; // demo 5 detik
 
 const timerElement = document.getElementById("timer");
 const countdown = document.getElementById("countdown");
 const openContainer = document.getElementById("open-container");
-const popup = document.getElementById("popup");
+const backsong = document.getElementById("backsong");
 
 // Countdown
 const countdownInterval = setInterval(() => {
@@ -15,7 +15,7 @@ const countdownInterval = setInterval(() => {
   if (distance <= 0) {
     clearInterval(countdownInterval);
     countdown.classList.add("hidden");
-    openContainer.classList.remove("hidden"); // munculin tombol
+    openContainer.classList.remove("hidden"); // munculin tombol open
     return;
   }
 
@@ -27,29 +27,34 @@ const countdownInterval = setInterval(() => {
   timerElement.innerHTML = `${days}d ${hours}h ${minutes}m ${seconds}s`;
 }, 1000);
 
-// Fungsi tombol Open Me
+// Fungsi Open Me
 function openSurprise() {
-  document.getElementById("backsong").play().catch(() => {
-    alert("🎶 Klik lagi untuk memutar musik ya!");
-  });
-  popup.classList.remove("hidden");
+  backsong.play().catch(() => alert("🎶 Klik lagi untuk memutar musik ya!"));
+  showPopup("popup-main"); // buka popup utama
   openContainer.classList.add("hidden");
   startConfetti();
 }
 
-// tombol GIF
-function openGif() {
-  window.open("https://media.giphy.com/media/3o6ZsYm5hGZp1t1E7W/giphy.gif", "_blank");
+// 🎥 Popup Video
+function openVideoPopup() {
+  showPopup("popup-video");
+}
+function closeVideoPopup() {
+  showPopup("popup-main");
 }
 
-// tombol Open More
-function openNext() {
-  alert("💌 Ini hanya awal dari kejutan kecilku untukmu!");
+// 💌 Popup Collage
+function openCollagePopup() {
+  showPopup("popup-collage");
+}
+function closeCollagePopup() {
+  showPopup("popup-main");
 }
 
 // 🎉 Confetti
 function startConfetti() {
   const canvas = document.getElementById("confetti-canvas");
+  if (!canvas) return;
   const ctx = canvas.getContext("2d");
   canvas.width = window.innerWidth;
   canvas.height = window.innerHeight;
@@ -74,4 +79,49 @@ function startConfetti() {
     requestAnimationFrame(update);
   }
   update();
+}
+
+// 🔄 Helper untuk transisi antar popup
+function showPopup(id) {
+  document.querySelectorAll("[id^='popup-']").forEach(el => {
+    el.classList.add("hidden");
+  });
+
+  const popup = document.getElementById(id);
+  if (popup) {
+    popup.classList.remove("hidden");
+  }
+}
+
+// Gambar untuk slideshow (dari assets/img)
+const collageImages = [
+  "/assets/img/1.jpg",
+  "/assets/img/2.jpg",
+  "/assets/img/3.jpg",
+  "/assets/img/4.jpg",
+  "/assets/img/5.jpg",
+  "/assets/img/6.jpg"
+];
+
+let collageIndex = 0;
+let collageInterval;
+
+function openCollagePopup() {
+  showPopup("popup-collage");
+
+  // mulai slideshow
+  const slideshow = document.getElementById("slideshow-img");
+  collageInterval = setInterval(() => {
+    collageIndex = (collageIndex + 1) % collageImages.length;
+    slideshow.style.opacity = 0;
+    setTimeout(() => {
+      slideshow.src = collageImages[collageIndex];
+      slideshow.style.opacity = 1;
+    }, 500);
+  }, 2500); // ganti gambar tiap 2.5 detik
+}
+
+function closeCollagePopup() {
+  showPopup("popup-main");
+  clearInterval(collageInterval); // stop slideshow
 }
