@@ -1,5 +1,5 @@
 // Target tanggal
-const targetDate = new Date("Sep 3, 2025 08:00:00").getTime();
+const targetDate = new Date("Sep 3, 2025 09:54:00").getTime();
 // const targetDate = new Date().getTime() + 5000; // demo 5 detik
 
 const timerElement = document.getElementById("timer");
